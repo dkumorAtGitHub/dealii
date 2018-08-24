@@ -243,7 +243,7 @@ ConstraintMatrix::add_entries
     {
       Assert (line != col_val_pair->first,
               ExcMessage ("Can't constrain a degree of freedom to itself"));
-
+      bool entry_exists = false;
       for (ConstraintLine::Entries::const_iterator
            p=line_ptr->entries.begin();
            p != line_ptr->entries.end(); ++p)
@@ -253,10 +253,12 @@ ConstraintMatrix::add_entries
             Assert (p->second == col_val_pair->second,
                     ExcEntryAlreadyExists(line, col_val_pair->first,
                                           p->second, col_val_pair->second));
+            entry_exists = true;
             break;
           }
 
-      line_ptr->entries.push_back (*col_val_pair);
+      if (entry_exists == false)
+        line_ptr->entries.push_back (*col_val_pair);
     }
 }
 
